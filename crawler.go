@@ -15,6 +15,7 @@ import (
 
 
 type crawler struct {
+	// Aqui temos os atributos e métodos necessários para realizar a coleta dos dados
 	collectionTimeout time.Duration
 	timeBetweenSteps  time.Duration
 	year              string
@@ -77,7 +78,7 @@ func (c crawler) crawl() ([]string, error) {
 		return []string{cqFname, iFname}, nil
 	}
 
-	// Retorna caminhos completos dos arquivos baixados.
+	// Retorna os caminhos completos dos arquivos baixados.
 	return []string{cqFname}, nil
 }
 
@@ -98,11 +99,11 @@ func (c crawler) abreCaixaDialogo(ctx context.Context, tipo string) error {
 		chromedp.Navigate(baseURL),
 		chromedp.Sleep(c.timeBetweenSteps),
 
-		// Seleciona ano
+		// Seleciona o ano
 		chromedp.SetValue(selectYear, c.year, chromedp.BySearch),
 		chromedp.Sleep(c.timeBetweenSteps),
 
-		// Seleciona mes
+		// Seleciona o mês
 		chromedp.SetValue(`//*[@id="selMes"]`, c.month, chromedp.BySearch, chromedp.NodeVisible),
 		chromedp.Sleep(c.timeBetweenSteps),
 
@@ -117,7 +118,7 @@ func (c crawler) abreCaixaDialogo(ctx context.Context, tipo string) error {
 	)
 }
 
-// exportaPlanilha clica no botão correto para exportar para excel, espera um tempo para download renomeia o arquivo.
+// A função exportaPlanilha clica no botão correto para exportar para excel, espera um tempo para o download e renomeia o arquivo.
 func (c crawler) exportaPlanilha(ctx context.Context, fName string) error {
 	if strings.Contains(fName, "contracheque") {
 		chromedp.Run(ctx,
@@ -142,10 +143,10 @@ func (c crawler) exportaPlanilha(ctx context.Context, fName string) error {
 	return nil
 }
 
-// nomeiaDownload dá um nome ao último arquivo modificado dentro do diretório
-// passado como parâmetro nomeiaDownload dá pega um arquivo
+// A função nomeiaDownload dá um nome ao último arquivo modificado dentro do diretório
+// passado como parâmetro
 func nomeiaDownload(output, fName string) error {
-	// Identifica qual foi o ultimo arquivo
+	// Identifica qual foi o último arquivo
 	files, err := os.ReadDir(output)
 	if err != nil {
 		return fmt.Errorf("erro lendo diretório %s: %v", output, err)
@@ -164,7 +165,7 @@ func nomeiaDownload(output, fName string) error {
 			newestFPath = fPath
 		}
 	}
-	// Renomeia o ultimo arquivo modificado.
+	// Renomeia o último arquivo modificado.
 	if err := os.Rename(newestFPath, fName); err != nil {
 		return fmt.Errorf("erro renomeando último arquivo modificado (%s)->(%s): %v", newestFPath, fName, err)
 	}

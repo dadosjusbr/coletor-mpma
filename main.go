@@ -15,16 +15,20 @@ const (
 )
 
 func main() {
+	// Aqui estamos pegando e checando as variáveis referente aos dados da coleta
+	// O mês
 	if _, err := strconv.Atoi(os.Getenv("MONTH")); err != nil {
 		log.Fatalf("Invalid month (\"%s\"): %q", os.Getenv("MONTH"), err)
 	}
 	month := os.Getenv("MONTH")
 
+	// O ano
 	if _, err := strconv.Atoi(os.Getenv("YEAR")); err != nil {
 		log.Fatalf("Invalid year (\"%s\"): %q", os.Getenv("YEAR"), err)
 	}
 	year := os.Getenv("YEAR")
 
+	// E a pasta onde as planilhas baixadas ficarão salvas
 	outputFolder := os.Getenv("OUTPUT_FOLDER")
 	if outputFolder == "" {
 		outputFolder = "/output"
@@ -63,7 +67,7 @@ func main() {
 		log.Fatalf("Error crawling (%s, %s, %s): %v", year, month, outputFolder, err)
 	}
 
-	// O parser do MPMA espera os arquivos separados por \n. Mudanças aqui tem
-	// refletir as expectativas lá.
+	// O parser do MPMA espera os arquivos separados por \n. 
+	//Mudanças aqui tem que refletir as expectativas lá.
 	fmt.Println(strings.Join(downloads, "\n"))
 }
