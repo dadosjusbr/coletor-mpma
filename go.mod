@@ -1,4 +1,4 @@
-module coletor-mpap
+module coletor-mpma
 
 go 1.17
 

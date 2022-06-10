@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	defaultGeneralTimeout      = 4 * time.Minute  // Duração máxima total da coleta de todos os arquivos. Valor padrão calculado a partir de uma média de execuções ~4.5min
-	defaulTimeBetweenSteps     = 5 * time.Second //	 Tempo de espera entre passos do coletor."
+	defaultGeneralTimeout  = 4 * time.Minute // Duração máxima total da coleta de todos os arquivos. Valor padrão calculado a partir de uma média de execuções ~4.5min
+	defaulTimeBetweenSteps = 5 * time.Second //	 Tempo de espera entre passos do coletor."
 )
 
 func main() {
@@ -56,18 +56,18 @@ func main() {
 		}
 	}
 	c := crawler{
-		collectionTimeout: generalTimeout,
-		timeBetweenSteps:  timeBetweenSteps,
-		year:              year,
-		month:             month,
-		output:            outputFolder,
+		generalTimeout:   generalTimeout,
+		timeBetweenSteps: timeBetweenSteps,
+		year:             year,
+		month:            month,
+		output:           outputFolder,
 	}
 	downloads, err := c.crawl()
 	if err != nil {
 		log.Fatalf("Error crawling (%s, %s, %s): %v", year, month, outputFolder, err)
 	}
 
-	// O parser do MPMA espera os arquivos separados por \n. 
+	// O parser do MPMA espera os arquivos separados por \n.
 	//Mudanças aqui tem que refletir as expectativas lá.
 	fmt.Println(strings.Join(downloads, "\n"))
 }
