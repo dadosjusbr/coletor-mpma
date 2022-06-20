@@ -7,18 +7,27 @@ Esse coletor é baseado na tecnologia [Chrome DevTools Protocol(CDP)](https://ch
 ### Executando com Docker
 
  - Inicialmente é preciso instalar o [Docker](https://docs.docker.com/install/). 
+ - A imagem do contêiner do coletor poderá ser construída ou baixada. 
 
  - Construção da imagem:
 
     ```sh
     $ docker build --pull --rm -t coletormpma:latest . 
+     ```
+     
+ - Download da imagem:
+
+    ```sh
+    $ docker pull ghcr.io/dadosjusbr/coletor-mpma:main
     ```
-    Criamos então o repositório onde ficarão armazenadas as planilhas (caso já não exista):
+    
+ - Execução:
+
+    Criamos, então, o repositório onde ficarão armazenadas as planilhas (caso já não exista):
     ```sh
     $ mkdir /tmp/coletormpma
     ```
- - Execução:
- 
+    Para executar, basta executar o seguinte comando:
     ```sh
     $ docker run -e YEAR={ano} -e MONTH={mês} -e OUTPUT_FOLDER=/output --name coletormpma --mount type=bind,src=/tmp/coletormpma,dst=/output coletormpma
     ```
