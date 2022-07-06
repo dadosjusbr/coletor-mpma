@@ -62,6 +62,28 @@ func (c crawler) crawl() ([]string, error) {
 	}
 	log.Printf("Download realizado com sucesso!\n")
 
+	// O contracheque do MPMA possui o mês 13, então baixamos o mês 13 juntamente ao mês 12.
+
+	/* Esse mês 13 faz referência ao 13º salário e contém os valores de Gratificação Natalina, Abono de Permanência,
+	Contribuição Previdenciária e Imposto de Renda.*/
+
+	// As planilhas do mês 13 das verbas indenizatórias não têm dados e por isso apenas o contracheque desse mês é baixado.
+
+	cqFname13 := ""
+	if c.month == "12" {
+		log.Printf("Realizando seleção (%s/%s)...", "13", c.year)
+		if err := c.selecionaAnoMes(ctx, "contra", c.year, "13"); err != nil {
+			log.Fatalf("Erro no setup:%v", err)
+		}
+		log.Printf("Seleção realizada com sucesso!\n")
+		cqFname13 = filepath.Join(c.output, fmt.Sprintf("membros-ativos-contracheque-13-%s.xls", c.year))
+		log.Printf("Fazendo download do contracheque (%s)...", cqFname13)
+		if err := c.exportaPlanilha(ctx, cqFname13); err != nil {
+			log.Fatalf("Erro fazendo download do contracheque: %v", err)
+		}
+		log.Printf("Download realizado com sucesso!\n")
+	}
+
 	// Indenizações
 	log.Printf("Realizando seleção (%s/%s)...", c.month, c.year)
 	if err := c.selecionaAnoMes(ctx, "inde", c.year, c.month); err != nil {
@@ -75,8 +97,11 @@ func (c crawler) crawl() ([]string, error) {
 	}
 	log.Printf("Download realizado com sucesso!\n")
 
-	return []string{cqFname, iFname}, nil
-
+	if c.month == "12" {
+		return []string{cqFname, iFname, cqFname13}, nil
+	} else {
+		return []string{cqFname, iFname}, nil
+	}
 }
 
 // Retorna os caminhos completos dos arquivos baixados.
