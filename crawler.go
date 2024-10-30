@@ -146,7 +146,7 @@ func (c crawler) exportaPlanilha(ctx context.Context, fName string) error {
 	if strings.Contains(fName, "contracheque") {
 		chromedp.Run(ctx,
 			// Clica no botão de download
-			chromedp.Click(`//*[@id="topo"]/p[1]/a`, chromedp.BySearch, chromedp.NodeVisible),
+			chromedp.Click(`//*[@id="contracheque_wrapper"]/div[1]/button[3]/span`, chromedp.BySearch, chromedp.NodeVisible),
 			chromedp.Sleep(c.timeBetweenSteps),
 		)
 	} else {
